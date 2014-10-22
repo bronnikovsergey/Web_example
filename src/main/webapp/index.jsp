@@ -1,12 +1,12 @@
 <html>
    <head>
-      <title>Example Web Application</title>
+      <title>Query</title>
    </head>
    <body>
-      <p>This is a static document with a form in it.</p>
+      <p>Please enter search term:</p>
       <form method="POST" action="servlet"/>
          <input name="field" type="text" />
-         <input type="submit" value="Submit" />
+         <input type="submit" value="Search" />
       </form>
    </body>
 </html>
