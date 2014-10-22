@@ -28,16 +28,28 @@ public class HelloServlet extends HttpServlet {
 
         out.println("<html>");
         out.println("<body>");
+        out.println("<p>\"" + field + "\"<p>");
 
         String[] pathToFile = new String[]{
-                "C:/Program Files/IntelliJ IDEA Community Edition 13.0/Projects/Web_exampleample/src/main/TXTfiles/Arya.txt",
-                "C:/Program Files/IntelliJ IDEA Community Edition 13.0/Projects/Web_exampleample/src/main/TXTfiles/Bran.txt",
-                "C:/Program Files/IntelliJ IDEA Community Edition 13.0/Projects/Web_exampleample/src/main/TXTfiles/Catelyn.txt",
-                "C:/Program Files/IntelliJ IDEA Community Edition 13.0/Projects/Web_exampleample/src/main/TXTfiles/Daenerys.txt",
-                "C:/Program Files/IntelliJ IDEA Community Edition 13.0/Projects/Web_exampleample/src/main/TXTfiles/Eddard.txt",
-                "C:/Program Files/IntelliJ IDEA Community Edition 13.0/Projects/Web_exampleample/src/main/TXTfiles/John.txt",
-                "C:/Program Files/IntelliJ IDEA Community Edition 13.0/Projects/Web_exampleample/src/main/TXTfiles/Sansa.txt",
-                "C:/Program Files/IntelliJ IDEA Community Edition 13.0/Projects/Web_exampleample/src/main/TXTfiles/Tyrion.txt"
+                "src/main/TXTfiles/Arya.txt",
+                "src/main/TXTfiles/Bran.txt",
+                "src/main/TXTfiles/Catelyn.txt",
+                "src/main/TXTfiles/Daenerys.txt",
+                "src/main/TXTfiles/Eddard.txt",
+                "src/main/TXTfiles/John.txt",
+                "src/main/TXTfiles/Sansa.txt",
+                "src/main/TXTfiles/Tyrion.txt"
+        };
+
+        String[] namesOfFiles = new String[] {
+                "Arya.txt",
+                "Bran.txt",
+                "Catelyn.txt",
+                "Daenerys.txt",
+                "Eddard.txt",
+                "John.txt",
+                "Sansa.txt",
+                "Tyrion.txt"
         };
 
         for (int i = 0; i < 8; i++) {
@@ -54,7 +66,7 @@ public class HelloServlet extends HttpServlet {
                     String[] words = line.split(" ");
                     for (String word : words) {
                         if (word.equalsIgnoreCase(field)) {
-                            out.println("<p> word \"" + field + "\" is in " + i + " file in " + k + " string for the first time</p>");
+                            out.println("<p> in file \"" + namesOfFiles[i] + "\" at line " + k + "</p>");
                             find = true;
                             break;
                         }
@@ -63,7 +75,7 @@ public class HelloServlet extends HttpServlet {
                 }
             }
             if (!find) {
-                out.println("<p>There is no word \"" + field + "\" in " + i + " file</p>");
+                out.println("<p>not in file \"" + namesOfFiles[i] + "\"</p>");
             }
         }
 
