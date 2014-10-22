@@ -1,7 +1,16 @@
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
-
+<?xml version="1.0" encoding="UTF-8"?>
 <web-app>
-  <display-name>Archetype Created Web Application</display-name>
+  <display-name>Example</display-name>
+
+  <!-- Declare the existence of a servlet. -->
+  <servlet>
+    <servlet-name>HelloServlet</servlet-name>
+    <servlet-class>HelloServlet</servlet-class>
+  </servlet>
+
+  <!-- Map URLs to that servlet. -->
+  <servlet-mapping>
+    <servlet-name>HelloServlet</servlet-name>
+    <url-pattern>/servlet</url-pattern>
+  </servlet-mapping>
 </web-app>
