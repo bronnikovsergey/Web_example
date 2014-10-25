@@ -3,9 +3,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Scanner;
 
 public class HelloServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -26,6 +29,7 @@ public class HelloServlet extends HttpServlet {
         System.out.println(field);
         PrintWriter out = resp.getWriter();
 
+
         out.println("<html>");
         out.println("<body>");
         out.println("<p>\"" + field + "\"<p>");
@@ -41,7 +45,7 @@ public class HelloServlet extends HttpServlet {
                 "src/main/TXTfiles/Tyrion.txt"
         };
 
-        String[] namesOfFiles = new String[] {
+        String[] namesOfFiles = new String[]{
                 "Arya.txt",
                 "Bran.txt",
                 "Catelyn.txt",
@@ -52,35 +56,48 @@ public class HelloServlet extends HttpServlet {
                 "Tyrion.txt"
         };
 
-        for (int i = 0; i < 8; i++) {
-            FileInputStream someFile = new FileInputStream(new File(pathToFile[i]));
-            byte[] content = new byte[someFile.available()];
-            someFile.read(content);
-            someFile.close();
-            String[] lines = new String(content, "UTF-8").split("\n");
+        String s;
+        String[] arrayString;
+        Map<String, HashSet<Integer>> map = new HashMap<String, HashSet<Integer>>();
+        HashSet<Integer> extra;
 
-            int k = 1;
-            boolean find = false;
-            for (String line : lines) {
-                if (!find) {
-                    String[] words = line.split(" ");
-                    for (String word : words) {
-                        if (word.equalsIgnoreCase(field)) {
-                            out.println("<p> in file \"" + namesOfFiles[i] + "\" at line " + k + "</p>");
-                            find = true;
-                            break;
-                        }
+        for (int i = 0; i < 8; i++) {
+            File someFile = new File(pathToFile[i]);
+            Scanner sc = new Scanner(someFile);
+
+            HashSet<Integer> set = new HashSet<Integer>();
+            set.add(i);
+
+            while (sc.hasNextLine()) {
+                s = sc.nextLine();
+                arrayString = s.split(" ");
+                for (String word : arrayString) {
+                    if (map.containsKey(word)) {
+                        extra = map.get(word);
+                        HashSet<Integer> some = new HashSet<Integer>();
+                        some.addAll(extra);
+                        some.add(i);
+                        map.put(word, some);
+                    } else {
+                        map.put(word, set);
                     }
-                    k++;
                 }
             }
-            if (!find) {
-                out.println("<p>not in file \"" + namesOfFiles[i] + "\"</p>");
-            }
+        }
+
+        String[] fullField = field.split(" ");
+        HashSet<Integer> wSet = new HashSet<Integer>(map.get(fullField[0]));
+
+        for (String aFullField : fullField) {
+            HashSet<Integer> intersect = new HashSet<Integer>(map.get(aFullField));
+            wSet.retainAll(intersect);
+        }
+
+        for (Integer index : wSet) {
+            out.println("<p>" + namesOfFiles[index] + "</p>");
         }
 
         out.println("</body>");
         out.println("</html>");
-
     }
 }
