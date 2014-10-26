@@ -34,7 +34,7 @@ public class HelloServlet extends HttpServlet {
 
             out.println("<html>");
             out.println("<body>");
-            out.println("<p>The words: " + field + ": <p>");
+            out.println("<p>The words: " + field + "</p>");
 
             String[] pathToFile = new String[]{
                     "src/main/TXTfiles/Arya.txt",
@@ -92,7 +92,6 @@ public class HelloServlet extends HttpServlet {
             boolean check = true;
 
             for (String aString : fullField) {
-
                 if (!map.containsKey(aString)) {
                     check = false;
                 }
