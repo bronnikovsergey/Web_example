@@ -23,7 +23,7 @@ public enum Indexer {
             File catalog = new File(System.getProperty("user.dir") + "/src/main/TXTfiles");
             files = catalog.listFiles();
             assert files != null;
-            char[] punctuationMarks = {'.','…','?',',','”','“','"',':','!',';','(',')'};
+            char[] punctuationMarks = {'-','.','…','?',',','”','“','"',':','!',';','(',')'};
             for (int i = 0; i < files.length; i++) {
                 File file = files[i];
 
@@ -34,7 +34,7 @@ public enum Indexer {
                 while (sc.hasNextLine()) {
                     s = sc.nextLine().toLowerCase();
                     for (char punctuationMark : punctuationMarks) {
-                        s = s.replace(punctuationMark, '\0');
+                        s = s.replace(punctuationMark, ' ');
                     }
                     words = s.split(" ");
                     for (String word : words) {
