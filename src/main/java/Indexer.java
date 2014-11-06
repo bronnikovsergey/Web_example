@@ -13,35 +13,39 @@ public enum Indexer {
 
     private Indexer() {
 
-        String str;
-        String[] arrayString;
+        String s;
+        String[] words;
 
         invertIndex = new HashMap<String, HashSet<Integer>>();
-        HashSet<Integer> extra;
+        HashSet<Integer> extraSet;
 
         try {
-            File f1 = new File(System.getProperty("user.dir") + "/src/main/TXTfiles");
-            files = f1.listFiles();
+            File catalog = new File(System.getProperty("user.dir") + "/src/main/TXTfiles");
+            files = catalog.listFiles();
             assert files != null;
+            char[] punctuationMarks = {'.','…','?',',','”','“','"',':','!',';','(',')'};
             for (int i = 0; i < files.length; i++) {
                 File file = files[i];
 
                 Scanner sc = new Scanner(file);
-                HashSet<Integer> set = new HashSet<Integer>();
-                set.add(i);
+                HashSet<Integer> setOfIndexOfFiles = new HashSet<Integer>();
+                setOfIndexOfFiles.add(i);
 
                 while (sc.hasNextLine()) {
-                    str = sc.nextLine();
-                    arrayString = str.split(" ");
-                    for (String word : arrayString) {
+                    s = sc.nextLine().toLowerCase();
+                    for (char punctuationMark : punctuationMarks) {
+                        s = s.replace(punctuationMark, '\0');
+                    }
+                    words = s.split(" ");
+                    for (String word : words) {
                         if (invertIndex.containsKey(word)) {
-                            extra = invertIndex.get(word);
-                            HashSet<Integer> some = new HashSet<Integer>();
-                            some.addAll(extra);
-                            some.add(i);
-                            invertIndex.put(word, some);
+                            extraSet = invertIndex.get(word);
+                            HashSet<Integer> indexOfSuitableFiles = new HashSet<Integer>();
+                            indexOfSuitableFiles.addAll(extraSet);
+                            indexOfSuitableFiles.add(i);
+                            invertIndex.put(word, indexOfSuitableFiles);
                         } else {
-                            invertIndex.put(word, set);
+                            invertIndex.put(word, setOfIndexOfFiles);
                         }
                     }
                 }
@@ -55,38 +59,38 @@ public enum Indexer {
         return INSTANCE;
     }
 
-    public ArrayList<String> search(String input) {
+    public ArrayList<String> search(String inputString) {
 
-        ArrayList<String> result = new ArrayList<String>();
-        if (!input.equals("")) {
-            String[] inputArr = input.split(" ");
+        ArrayList<String> filesWithInputWords = new ArrayList<String>();
+        if (!inputString.equals("")) {
+            String[] inputWords = inputString.split(" ");
             boolean check = true;
 
-            for (String aString : inputArr) {
+            for (String aString : inputWords) {
                 if (!invertIndex.containsKey(aString)) {
                     check = false;
                 }
             }
 
             if (check) {
-                HashSet<Integer> wSet = new HashSet<Integer>(invertIndex.get(inputArr[0]));
+                HashSet<Integer> finalSet = new HashSet<Integer>(invertIndex.get(inputWords[0]));
 
-                for (String aFullField : inputArr) {
+                for (String aFullField : inputWords) {
                     HashSet<Integer> intersect = new HashSet<Integer>(invertIndex.get(aFullField));
-                    wSet.retainAll(intersect);
+                    finalSet.retainAll(intersect);
                 }
 
-                for (Integer index : wSet) {
-                    result.add("<p>" + files[index].getName() + "</p>");
+                for (Integer index : finalSet) {
+                    filesWithInputWords.add("<p>" + files[index].getName() + "</p>");
                 }
 
             } else {
-                result.add("<p> no words in all files </p>");
+                filesWithInputWords.add("<p> no words in all files </p>");
             }
 
         } else {
-            result.add("<p> empty form </p>");
+            filesWithInputWords.add("<p> empty form </p>");
         }
-        return result;
+        return filesWithInputWords;
     }
 }

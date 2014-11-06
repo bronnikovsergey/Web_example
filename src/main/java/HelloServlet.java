@@ -19,12 +19,8 @@ public class HelloServlet extends HttpServlet {
 
         ArrayList<String> files = Indexer.getInstance().search(field);
 
-        out.println("<html>");
-        out.println("<body>");
         for (String file : files) {
-            out.println("<p> " + file + "</p>");
+            out.println(file);
         }
-        out.println("</body>");
-        out.println("</html>");
     }
 }
