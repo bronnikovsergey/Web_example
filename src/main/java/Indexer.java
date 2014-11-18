@@ -1,3 +1,6 @@
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -7,6 +10,8 @@ import java.util.Scanner;
 
 public enum Indexer {
     INSTANCE;
+
+    final Logger LOG = LoggerFactory.getLogger(Indexer.class);
 
     private HashMap<String, HashSet<Integer>> invertIndex;
     private File[] files;
@@ -23,7 +28,7 @@ public enum Indexer {
             File catalog = new File(System.getProperty("user.dir") + "/src/main/TXTfiles");
             files = catalog.listFiles();
             assert files != null;
-            char[] punctuationMarks = {'-','.','…','?',',','”','“','"',':','!',';','(',')'};
+            char[] punctuationMarks = {'-', '.', '…', '?', ',', '”', '“', '"', ':', '!', ';', '(', ')'};
             for (int i = 0; i < files.length; i++) {
                 File file = files[i];
 
@@ -50,7 +55,9 @@ public enum Indexer {
                     }
                 }
             }
+
         } catch (FileNotFoundException ex) {
+            LOG.error("no files", ex);
             // bad gateway
         }
     }
@@ -62,17 +69,21 @@ public enum Indexer {
     public ArrayList<String> search(String inputString) {
 
         ArrayList<String> filesWithInputWords = new ArrayList<String>();
+
+
         if (!inputString.equals("")) {
             String[] inputWords = inputString.split(" ");
             boolean check = true;
 
             for (String aString : inputWords) {
+                LOG.debug(aString);
                 if (!invertIndex.containsKey(aString)) {
                     check = false;
                 }
             }
 
-            if (check) {
+            if (check && inputWords.length != 0) {
+
                 HashSet<Integer> finalSet = new HashSet<Integer>(invertIndex.get(inputWords[0]));
 
                 for (String aFullField : inputWords) {
@@ -85,10 +96,12 @@ public enum Indexer {
                 }
 
             } else {
+                LOG.debug("no words");
                 filesWithInputWords.add("<p> no words in all files </p>");
             }
 
         } else {
+            LOG.debug("empty form");
             filesWithInputWords.add("<p> empty form </p>");
         }
         return filesWithInputWords;
