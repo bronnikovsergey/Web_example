@@ -104,6 +104,9 @@ public enum Indexer {
             LOG.debug("empty form");
             filesWithInputWords.add("<p> empty form </p>");
         }
+
+
         return filesWithInputWords;
     }
 }
+
