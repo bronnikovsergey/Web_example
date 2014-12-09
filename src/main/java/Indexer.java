@@ -72,7 +72,7 @@ public enum Indexer {
 
 
         if (!inputString.equals("")) {
-            String[] inputWords = inputString.split(" ");
+            String[] inputWords = inputString.toLowerCase().split(" ");
             boolean check = true;
 
             for (String aString : inputWords) {
